@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+databases
+sqlalchemy
+pydantic
+pydantic[dotenv]
+bcrypt
+asyncpg
+psycopg2
+passlib
+python-multipart

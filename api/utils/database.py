@@ -1,8 +1,10 @@
+from typing import Generator
 import databases
 import sqlalchemy
 from functools import lru_cache
+from sqlalchemy.orm import declarative_base, sessionmaker
+
 from api import config
-from api.models import metadata
 
 
 # 1 using pydantic to load .env file configurations
@@ -20,4 +22,16 @@ def database_config():
 
 database = databases.Database(database_config())
 engine = sqlalchemy.create_engine(database_config())
-metadata.create_all(engine)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+def get_db() -> Generator:
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+
+
+Base = declarative_base()

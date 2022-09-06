@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from api.auth import schema
-from api.database import database
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from api import models
-from api.models import User
 from api.utils import constant
 from api.utils.constant import ALGORITHM
+from api.utils.database import get_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/v1/auth/login')
 
@@ -39,7 +39,7 @@ def verify_access_token(token: str, credentials_exception):
     return token_data
 
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                           detail=f"Could not validate credentials",
                                           headers={"WWW-Authenticate": "Bearer"})
@@ -65,7 +65,7 @@ def check_active(access_token: str = Depends(oauth2_scheme)):
     claims = decode_token(access_token)
     if claims.get("user_id"):
         return claims
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="UNAUTHORIZED_User",
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="UNAUTHORIZED_USER",
                         headers={"WWW-Authenticate": "Bearer"})
 
 
@@ -73,7 +73,7 @@ def check_admin(claims: dict = Depends(check_active)):
     role = claims.get("role")
     if role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                            detail="UNAUTHORIZED_Admin",
+                            detail="UNAUTHORIZED_USER_ROLE",
                             headers={"WWW-Authenticate": "Bearer"})
     return claims
 

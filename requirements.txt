@@ -1,5 +1,4 @@
-Fastapi
-aiomysql==0.1.1 #for mysql database
+aiomysql==0.1.1
 anyio==3.6.1
 asgiref==3.5.2
 asyncpg==0.26.0
@@ -23,7 +22,7 @@ Jinja2==3.1.2
 MarkupSafe==2.1.1
 orjson==3.7.9
 passlib==1.7.4
-psycopg2-binary==2.9.3 #for postgres Database
+psycopg2-binary==2.9.3
 pyasn1==0.4.8
 pycparser==2.21
 pydantic==1.9.1

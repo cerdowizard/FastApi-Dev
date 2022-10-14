@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
-
+import uvicorn
 import models
 from adminActions.adminRouters import adminRoute
 from post.post_router import post_router
@@ -50,3 +50,6 @@ app.include_router(auth_router.router, tags=["Auth"])
 app.include_router(adminRoute, tags=["Admin Action"])
 app.include_router(user_router, tags=["User"])
 app.include_router(post_router, tags=["Post"])
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port="1530")
